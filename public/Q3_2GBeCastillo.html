@@ -4,8 +4,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
         <link rel="stylesheet" href="stylesheet.css">
-        <link rel="stylesheet" href="2G.css">
-
     
         <title>Signup</title>
     </head>
@@ -13,60 +11,91 @@
     <body>
         <h1 class="title">Sign-up Page</h1>
 
-    <form method="post" action="submit">
-        <label id="sID"> Student ID: </label> <br> 
-        <input type="number" id="sID" name="sID"> <br> 
+<form id="signupForm">
+  <label>Student ID:</label><br>
+  <input type="number" id="studentId"><br>
 
-        <label id="name"> Full Name: </label> <br> 
-        <input type="text" id="name" name="name"> <br>
+  <label>Full Name:</label><br>
+  <input type="text" id="fullName"><br>
 
-        <label id="bday"> Birthday: </label> <br> 
-        <input type="date" id="bday" name="bday"> <br> 
+  <label>Birthday:</label><br>
+  <input type="date" id="birthday"><br>
 
-        <label id="email"> Email: </label> <br> 
-        <input type="text" id="email" name="email"> <br>
+  <label>Email:</label><br>
+  <input type="email" id="email"><br>
 
-        <label id="pNum"> Phone Number: </label> <br> 
-        <input type="text" id="pNum" name="pNum"> <br> 
+  <label>Phone Number:</label><br>
+  <input type="text" id="phone"><br>
 
-        <br> <label id="title"> Grade Level: </label> <br> 
-        <select>
-            <option value="seven">7</option>
-            <option value="eight">8</option>
-            <option value="nine">9</option>
-            <option value="ten">10</option>
-            <option value="eleven">11</option>
-            <option value="twelve">12</option>
-        </select>
+  <label>Grade Level:</label><br>
+  <select id="grade">
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+  </select><br><br>
 
-        <br> <br>  <label> Position:
-            <input type="radio" name="internship" value="Intern" /> Intern
-            <input type="radio" name="internship" value="Extern" /> Extern
+  <label>Position:</label><br>
+  <input type="radio" name="position" value="Intern"> Intern
+  <input type="radio" name="position" value="Extern"> Extern<br><br>
 
-        <br> <br> <label id="title"> Club: </label> <br> 
-        <select>
-            <option value="flux">flux</option>
-            <option value="bake club">bake club</option>
-            <option value="sca">sca</option>
-            <option value="atom">atom</option>
-            <option value="labuyo">labuyo</option>
-            <option value="acts">acts</option>
-        </select>
+  <label>Club:</label><br>
+  <select id="club">
+    <option value="Flux">Flux</option>
+    <option value="Bake Club">Bake Club</option>
+    <option value="SCA">SCA</option>
+    <option value="Atom">Atom</option>
+    <option value="Labuyo">Labuyo</option>
+    <option value="ACTS">ACTS</option>
+  </select><br><br>
 
-        <label> Why do you want to join?: 
-            <textarea name="about" id="about">
-            </textarea>
-        </label><br/><br/>
-    </form>
+  <label>Why do you want to join?</label><br>
+  <textarea id="reason"></textarea><br><br>
 
-    <form method="post" action="submit">
-        <br>
-            <fieldset>
-              <legend>Action Buttons</legend>
-              <button type="submit"> Accept </button>
-              <input type="reset" value=" Clear " />
-            </fieldset> 
-    </form>
+  <button type="submit">Accept</button>
+  <input type="reset" value="Clear">
+</form>
 
-    </body>
-</html>
+<button onclick="location.href='viewSignUps.html'">View Signups</button>
+
+<script>
+  const key = "signups";
+
+  function loadSignups() {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : [];
+  }
+
+  function saveSignups(data) {
+    localStorage.setItem(key, JSON.stringify(data));
+  }
+
+  document.getElementById("signupForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const student = {
+      id: document.getElementById("studentId").value,
+      name: document.getElementById("fullName").value,
+      birthday: document.getElementById("birthday").value,
+      email: document.getElementById("email").value,
+      phone: document.getElementById("phone").value,
+      grade: document.getElementById("grade").value,
+      position: document.querySelector('input[name="position"]:checked')?.value,
+      club: document.getElementById("club").value,
+    };
+
+    if (!student.id || !student.name || !student.position) {
+      alert("Please complete required fields");
+      return;
+    }
+
+    const signups = loadSignups(); 
+    signups.push(student);
+    saveSignups(signups);       
+
+    alert("Signup saved!");
+    this.reset();
+  });
+</script>
