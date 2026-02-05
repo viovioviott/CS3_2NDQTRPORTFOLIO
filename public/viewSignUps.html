@@ -1,0 +1,82 @@
+            <h1>
+                Show List of Students who Signed Up    
+            </h1>
+        </div>
+        <nav class="navbar">
+            <a href="Q3_2GBeCastillo.html"> Back to Signup </a> <br>
+            <p>Total Signup: <span id="total">0</span></p>
+              <label>
+                Select A Category:
+                <select id="showCat" onchange="getShows()">
+                  <option value="ALL">All Clubs</option>
+                  <option value="Flux">Flux</option>
+                  <option value="Bake Club">Bake Club</option>
+                  <option value="SCA">SCA</option>
+                  <option value="Atom">Atom</option>
+                  <option value="Labuyo">Labuyo</option>
+                  <option value="ACTS">ACTS</option>
+                </select>
+              </label>
+            
+        </select>
+
+        </nav>
+    </header>
+    <section>
+      <table id="results"> </table>
+      
+<script>
+function getShows() {
+
+  const cat = document.getElementById("showCat").value;
+  const results = document.getElementById("results");
+  const totalSpan = document.getElementById("total");
+
+  let signupString = localStorage.getItem("signups");
+  let count = 0;
+
+  if (!signupString || signupString === "{}") {
+    results.innerHTML = "No signups for the club";
+    totalSpan.textContent = 0;
+    return;
+  }
+  
+  let rowString = `
+    <tr>
+      <th>Club</th>
+      <th>ID</th>
+      <th>Full Name</th>
+      <th>Grade</th>
+      <th>Email</th>
+      <th>Mobile</th>
+      <th>Intern/Extern</th>
+    </tr>
+  `;
+
+  const signupList = JSON.parse(signupString);
+
+  for (let key in signupList) {
+
+    if (cat !== "ALL" && signupList[key].club !== cat) {
+      continue;
+    }
+
+    count++;
+
+    rowString += `
+      <tr>
+        <td>${signupList[key].club}</td>
+        <td>${key}</td>
+        <td>${signupList[key].name}</td>
+        <td>Grade ${signupList[key].grade}</td>
+        <td>${signupList[key].email}</td>
+        <td>${signupList[key].phone}</td>
+        <td>${signupList[key].position}</td>
+      </tr>
+    `;
+  }
+
+  results.innerHTML = rowString;
+  totalSpan.textContent = count;
+}
+</script>
